@@ -11,7 +11,6 @@ class luckyBlock
 public:
     int first;
     int second;
-    //bool usable = 0;
 };
 
 class MatchMaker
@@ -23,16 +22,22 @@ public:
     int binarySearch(int);
     void inputPeople();
     void inputLuckyNumber();
-    void outputMatch(int);
+    void outputMatch();
     void buildHashTable();
+    void openFile();
 
     vector<int> luckyNumber;
     vector<int> NumberOfPerson;
     map<int, vector<luckyBlock>> hashTable;
+    fstream inputFile;
 };
 
 MatchMaker::MatchMaker(int size)
 {
+    // inputFile.open("testCase.txt", ios::in);
+
+    // inputFile >> size;
+
     NumberOfPerson.resize(size);
 }
 
@@ -41,6 +46,8 @@ void MatchMaker::inputPeople()
     for (int i = 0; i < NumberOfPerson.size(); i++)
     {
         cin >> NumberOfPerson[i];
+
+        //inputFile >> NumberOfPerson[i];
     }
 }
 
@@ -82,29 +89,33 @@ void MatchMaker::inputLuckyNumber()
 {
     int temp;
     while (cin >> temp)
+    //while (inputFile >> temp)
     {
         luckyNumber.push_back(temp);
     }
 }
 
-void MatchMaker::outputMatch(int target)
+void MatchMaker::outputMatch()
 {
-    // for (int i = 0; i < NumberOfPerson.size() - 1; i++)
-    // {
-    //     for (int j = i + 1; j < NumberOfPerson.size(); j++)
-    //     {
-    //         if (NumberOfPerson[i] + NumberOfPerson[j] == target)
-    //         {
-    //             cout << NumberOfPerson[i] << " " << NumberOfPerson[j] << endl;
-    //         }
-    //     }
-    // }
-    if (!hashTable[target].empty())
+    for (auto &target : luckyNumber)
     {
-        for (auto &p : hashTable[target])
+        for (int i = 0; i < NumberOfPerson.size() - 1; i++)
         {
-            cout << p.first << " " << p.second << endl;
+            for (int j = i + 1; j < NumberOfPerson.size(); j++)
+            {
+                if (NumberOfPerson[i] + NumberOfPerson[j] == target)
+                {
+                    cout << NumberOfPerson[i] << " " << NumberOfPerson[j] << endl;
+                }
+            }
         }
+        //     if (!hashTable[target]].empty())
+        //     {
+        //         for (auto &p : hashTable[target])
+        //         {
+        //             cout << p.first << " " << p.second << endl;
+        //         }
+        //     }
     }
 }
 
@@ -126,16 +137,14 @@ void MatchMaker::buildHashTable()
 //********************main**************
 int main()
 {
-    int size;
+    int size = 1;
     cin >> size;
 
-   
     MatchMaker M(size);
     M.inputPeople();
     M.inputLuckyNumber();
     M.buildHashTable();
-    for (int i = 0; i < M.luckyNumber.size(); i++)
-    {
-        M.outputMatch(M.luckyNumber[i]);
-    }
+
+    M.outputMatch();
+    M.inputFile.close();
 }
